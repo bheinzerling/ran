@@ -8,11 +8,13 @@ from torch.autograd import Variable
 import data
 import model
 
-parser = argparse.ArgumentParser(description='PyTorch PennTreeBank RNN/LSTM Language Model')
+parser = argparse.ArgumentParser(
+        description='PyTorch PennTreeBank RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/penn',
                     help='location of the data corpus')
-parser.add_argument('--model', type=str, default='LSTM',
-                    help='type of recurrent net (RAN, RNN_TANH, RNN_RELU, LSTM, GRU)')
+parser.add_argument(
+    '--model', type=str, default='LSTM',
+    help='type of recurrent net (RAN, RNN_TANH, RNN_RELU, LSTM, GRU)')
 parser.add_argument('--emsize', type=int, default=200,
                     help='size of word embeddings')
 parser.add_argument('--nhid', type=int, default=200,
@@ -47,7 +49,9 @@ args = parser.parse_args()
 torch.manual_seed(args.seed)
 if torch.cuda.is_available():
     if not args.cuda:
-        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+        print(
+            "WARNING: You have a CUDA device, "
+            "so you should probably run with --cuda")
     else:
         torch.cuda.manual_seed(args.seed)
 
@@ -80,7 +84,9 @@ test_data = batchify(corpus.test, eval_batch_size)
 ###############################################################################
 
 ntokens = len(corpus.dictionary)
-model = model.RNNModel(args.model, ntokens, args.emsize, args.nhid, args.nlayers, args.dropout, args.tied)
+model = model.RNNModel(
+    args.model, ntokens, args.emsize, args.nhid,
+    args.nlayers, args.dropout, args.tied)
 if args.cuda:
     model.cuda()
 
@@ -92,7 +98,8 @@ criterion = nn.CrossEntropyLoss()
 
 
 def repackage_hidden(h):
-    """Wraps hidden states in new Variables, to detach them from their history."""
+    """Wraps hidden states in new Variables,
+        to detach them from their history."""
     if type(h) == Variable:
         return Variable(h.data)
     else:
@@ -130,15 +137,17 @@ def train():
     hidden = model.init_hidden(args.batch_size)
     for batch, i in enumerate(range(0, train_data.size(0) - 1, args.bptt)):
         data, targets = get_batch(train_data, i)
-        # Starting each batch, we detach the hidden state from how it was previously produced.
-        # If we didn't, the model would try backpropagating all the way to start of the dataset.
+        # Starting each batch, we detach the hidden state from how it
+        # was previously produced. If we didn't, the model would try
+        # backpropagating all the way to start of the dataset.
         hidden = repackage_hidden(hidden)
         model.zero_grad()
         output, hidden = model(data, hidden)
         loss = criterion(output.view(-1, ntokens), targets)
         loss.backward()
 
-        # `clip_grad_norm` helps prevent the exploding gradient problem in RNNs / LSTMs.
+        # `clip_grad_norm` helps prevent the exploding gradient problem
+        # in RNNs / LSTMs.
         torch.nn.utils.clip_grad_norm(model.parameters(), args.clip)
         for p in model.parameters():
             p.data.add_(-lr, p.grad.data)
@@ -149,12 +158,14 @@ def train():
             cur_loss = total_loss[0] / args.log_interval
             elapsed = time.time() - start_time
             print(
-                '| epoch {:3d} | {:5d}/{:5d} batches | lr {:02.2f} | ms/batch {:5.2f} | '
-                'loss {:5.2f} | ppl {:8.2f}'.format(
+                '| epoch {:3d} | {:5d}/{:5d} batches | lr {:02.2f} | '
+                'ms/batch {:5.2f} | loss {:5.2f} | ppl {:8.2f}'.format(
                     epoch, batch, len(train_data) // args.bptt, lr,
-                    elapsed * 1000 / args.log_interval, cur_loss, math.exp(cur_loss)))
+                    elapsed * 1000 / args.log_interval,
+                    cur_loss, math.exp(cur_loss)))
             total_loss = 0
             start_time = time.time()
+
 
 # Loop over epochs.
 lr = args.lr
@@ -167,9 +178,11 @@ try:
         train()
         val_loss = evaluate(val_data)
         print('-' * 89)
-        print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
-                'valid ppl {:8.2f}'.format(epoch, (time.time() - epoch_start_time),
-                                           val_loss, math.exp(val_loss)))
+        print(
+            '| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
+            'valid ppl {:8.2f}'.format(
+                epoch, (time.time() - epoch_start_time),
+                val_loss, math.exp(val_loss)))
         print('-' * 89)
         # Save the model if the validation loss is the best we've seen so far.
         if not best_val_loss or val_loss < best_val_loss:
@@ -177,7 +190,8 @@ try:
                 torch.save(model, f)
             best_val_loss = val_loss
         else:
-            # Anneal the learning rate if no improvement has been seen in the validation dataset.
+            # Anneal the learning rate if no improvement has been seen
+            # in the validation dataset.
             lr /= 4.0
 except KeyboardInterrupt:
     print('-' * 89)

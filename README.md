@@ -26,3 +26,8 @@ cd ran
 python main.py --cuda --emsize 256 --nhid 1024 --dropout 0.5 --epochs 100 --nlayers 1 --batch-size 512
 ```
 
+This should result in a test set perplexity of ~122, which roughly agrees with the results reported in the paper.
+
+Better results can be achieved with lower batch sizes, e.g. with batch size 40:
+
+ End of training | test loss  4.50 | test ppl    89.97
