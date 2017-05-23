@@ -28,8 +28,12 @@ python main.py --cuda --emsize 256 --nhid 1024 --dropout 0.5 --epochs 100 --nlay
 
 This should result in a test set perplexity which roughly agrees with the RAN (tanh) result reported in the paper:
 
+```
 End of training | test loss  4.78 | test ppl   119.40
+```
 
 Better results can be achieved with lower batch sizes, e.g. with batch size 40:
 
+```
 End of training | test loss  4.45 | test ppl    85.24
+```
