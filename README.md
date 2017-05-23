@@ -23,7 +23,7 @@ and then do:
 
 ```
 cd ran
-python main.py --cuda --emsize 256 --nhid 1024 --dropout 0.5 --epochs 100 --nlayers 1 --batch-size 512
+python main.py --cuda --emsize 256 --nhid 1024 --dropout 0.5 --epochs 100 --nlayers 1 --batch-size 512 --model RAN
 ```
 
 This should result in a test set perplexity which roughly agrees with the RAN (tanh) result reported in the paper:
