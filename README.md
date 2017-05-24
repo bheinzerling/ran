@@ -32,8 +32,26 @@ This should result in a test set perplexity which roughly agrees with the RAN (t
 End of training | test loss  4.78 | test ppl   119.40
 ```
 
-Better results can be achieved with lower batch sizes, e.g. with batch size 40:
+Better results can be achieved with smaller batch sizes, e.g. with batch size 40:
 
 ```
 End of training | test loss  4.45 | test ppl    85.24
+```
+
+batch size 20:
+
+```
+| End of training | test loss  4.42 | test ppl    83.42
+```
+
+batch size 10:
+
+```
+| End of training | test loss  4.41 | test ppl    82.62
+```
+
+batch size 5:
+
+```
+| End of training | test loss  4.49 | test ppl    89.21
 ```
