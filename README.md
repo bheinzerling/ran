@@ -1,6 +1,8 @@
 # Recurrent Additive Networks
 
-Note: This code is not up-to-date, please refer to the implementation by the original authors: https://github.com/kentonl/ran
+*Note: This code is not up-to-date, please refer to the implementation by the original authors: https://github.com/kentonl/ran*
+
+---
 
 This is a PyTorch implementation of Recurrent Additive Networks (RAN) by Kenton Lee, 
 Omer Levy, and Luke Zettlemoyer:
